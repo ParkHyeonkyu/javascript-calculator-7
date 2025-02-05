@@ -2,31 +2,48 @@ import { Console } from "@woowacourse/mission-utils";
 
 class App {
   async run() {
-
-    // 입력 값을 더해서 결과를 구함함
     const sumResult = (input) => {
+      Console.print("입력값 (JSON): " + JSON.stringify(input));
 
-      // 기본 구분자를 기준으로 배열을 만듦
-      const inputArr = input.split(/[,:]/);
+      input = input.replace(/\\n/g, "\n"); // 문자열 "\n"을 개행 문자로 변환
+      Console.print("변환된 입력값: " + JSON.stringify(input));
+
+      let delimiter = /[,:]/;
+
+      const escapeRegExp = (str) => str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+
+      if (input.startsWith("//")) {
+        const delimiterEndIndex = input.search(/\n/); // 개행 문자 찾기
+        Console.print("개행 문자 인덱스: " + delimiterEndIndex);
+        if (delimiterEndIndex === -1) {
+          throw new Error("올바른 형식이 아닙니다."); // 개행이 없으면 에러 처리
+        }
+
+        let customDelimiter = input.slice(2, delimiterEndIndex);
+        Console.print("커스텀 구분자 확인: " + customDelimiter);
+
+        input = input.slice(delimiterEndIndex + 1);
+        Console.print("문자열 확인: " + input);
+
+        delimiter = new RegExp(`[,:${escapeRegExp(customDelimiter)}]`);
+      }
+
+      const inputArr = input.split(delimiter);
       Console.print(inputArr);
 
       const sum = inputArr.reduce((acc, cur) => {
-        //현재 요소를 숫자로 변환하고, NaN이 아닌 경우에만 더함
         const num = Number(cur);
-        if (!isNaN(num)){
-          return acc + num;
-        }
-        return acc; //숫자가 아니면 누적 값 유지
+        return !isNaN(num) ? acc + num : acc;
       }, 0);
-      
-      Console.print(sum);
-      return sum;
-    }
 
-    // 사용자로부터 문자열을 입력 받음
+      Console.print(sum);
+      Console.print(delimiter);
+      return sum;
+    };
+
     const userInput = await Console.readLineAsync(`덧셈할 문자열을 입력해주세요.\n`);
-    const result = sumResult(userInput)
-    Console.print("값: " + result);
+    const output = sumResult(userInput);
+    Console.print("값: " + output);
   }
 }
 
