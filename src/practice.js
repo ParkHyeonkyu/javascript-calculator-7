@@ -51,3 +51,8 @@ console.log(circle.diameter);
 circle.diameter = 40;
 console.log(circle.diameter);
 console.log(circle.radius);
+
+
+// 문자열에 API 적용하기
+// 1. String Methods 사용
+// 2. 문자열을 배열로 변환 후 Array Methods 사용
