@@ -4,9 +4,7 @@ class App {
   async run() {
     const sumResult = async (input) => {
       
-        //Console.print("입력값 (JSON): " + JSON.stringify(input));
         input = input.replace(/\\n/g, "\n");
-        //Console.print("변환된 입력값(개행문자): " + JSON.stringify(input));
 
         let delimiter = /[,:]/;
         const escapeRegExp = (str) =>
@@ -14,7 +12,7 @@ class App {
 
         if (input.startsWith("//")) {
           const delimiterEndIndex = input.search(/\n/);
-          //Console.print("개행 문자 인덱스: " + delimiterEndIndex);
+
           if (delimiterEndIndex === -1) {
             throw new Error("\\n이 필요합니다.");
           }
@@ -26,9 +24,7 @@ class App {
           if (customDelimiter === ".") {
             throw new Error(".은 구분자로 사용할 수 없습니다.");
           }
-          //Console.print("커스텀 구분자 확인: " + customDelimiter);
           input = input.slice(delimiterEndIndex + 1);
-          //Console.print("문자열 확인: " + input);
 
           delimiter = new RegExp(`[,:${escapeRegExp(customDelimiter)}]`);
         } else if (!(input.startsWith("//") || !isNaN(Number(input[0])))) {
@@ -36,7 +32,6 @@ class App {
         }
 
         const inputArr = input.split(delimiter);
-        //Console.print(inputArr);
 
         const sum = inputArr.reduce((acc, cur) => {
           const num = Number(cur);
@@ -49,8 +44,6 @@ class App {
           throw new Error("유효하지 않은 문자가 포함되어있습니다.");
         }, 0);
 
-        //Console.print(sum);
-        //Console.print(delimiter);
         return sum;
       
     };
@@ -62,7 +55,6 @@ class App {
       const output = await sumResult(userInput);
       Console.print("결과 : " + output);
     } catch (error) {
-      //Console.print("[ERROR]: " + error.message);
       throw error;
     }
   }
